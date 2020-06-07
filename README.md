@@ -31,7 +31,7 @@ go run main.go
 **Try it out\***
 
 ```
-http POST localhost:9876/api html="<marquee>hello world</marquee>" --json
+http POST localhost:9876/api content="<marquee>hello world</marquee>" --json
 ```
 
 ## TODO
