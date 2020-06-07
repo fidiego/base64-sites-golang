@@ -59,6 +59,8 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	// set headers
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusAccepted)
+	// TODO: minify HTML
+
 	// encode
 	encoded := base64.StdEncoding.EncodeToString([]byte(p.Content))
 	base64_string := strings.Join([]string{"data:text/html;base64,", encoded}, "")
