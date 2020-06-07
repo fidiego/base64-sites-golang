@@ -8,18 +8,18 @@ This is a rewrite of [this](//github.com/fidiego/base64-sites) identical project
 
 Try it out the python version [here](//base64-sites.herokuapp.com).
 
-## Other Info
-
-- Built with [golang](https://golang.org/). No external dependencies.
-- HTML formatted with [tidy](http://www.html-tidy.org/).
-- JS formatted with [prettier](https://prettier.io/).
-
 ## Dev Setup
 
 **Make a `.env` file**
 
 ```
 cp env.default .env
+```
+
+**Install Dependencies**
+
+```
+go get
 ```
 
 **Run**

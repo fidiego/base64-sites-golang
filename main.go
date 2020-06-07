@@ -1,14 +1,18 @@
 package main
 
-import "encoding/base64"
-import "encoding/json"
-import "fmt"
-import "html/template"
-import "log"
-import "net/http"
-import "os"
-import "strings"
-import "time"
+import (
+	"encoding/base64"
+	"encoding/json"
+	"fmt"
+	"github.com/tdewolff/minify"
+	"github.com/tdewolff/minify/html"
+	"html/template"
+	"log"
+	"net/http"
+	"os"
+	"strings"
+	"time"
+)
 
 type ApiRequest struct {
 	Content string `json:content`
@@ -59,7 +63,11 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	// set headers
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusAccepted)
-	// TODO: minify HTML
+
+	//  minify HTML
+	minifier := minify.New()
+	minifier.AddFunc("text/html", html.Minify)
+	minified, err := minifier.String("text/html", p.Content)
 
 	// encode
 	encoded := base64.StdEncoding.EncodeToString([]byte(p.Content))
@@ -67,16 +75,18 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	// calculate lengths
 	content_length := len(p.Content)
 	base64_string_length := len(base64_string)
+	minified_content_length := len(minified)
 	// get elapsed time
 	elapsed := time.Now().Sub(start)
 
 	// compose response object
 	jsonResponse := ApiResponse{
-		Success:            true,
-		Base64StringLength: base64_string_length,
-		Base64String:       base64_string,
-		ExecutionTime:      elapsed.Seconds(),
-		ContentLength:      content_length,
+		Success:               true,
+		Base64StringLength:    base64_string_length,
+		Base64String:          base64_string,
+		ExecutionTime:         elapsed.Seconds(),
+		ContentLength:         content_length,
+		MinifiedContentLength: minified_content_length,
 	}
 	// write response
 	json.NewEncoder(w).Encode(jsonResponse)
