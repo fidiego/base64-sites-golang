@@ -51,7 +51,7 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 		// compose error response payload
 		errorResponse := ApiErrorResponse{
 			Success: false,
-			Message: "Expecting a JSON payload with a single attribute \"html\" .",
+			Message: "Expecting a JSON payload with a single attribute \"content\" .",
 		}
 		log.Println(errorResponse)
 		// write error response to buffer
