@@ -4,13 +4,14 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{.Content}} Base64 Site - Render Base 64 Sites</title>
+        <title>Base64 Site - Render Base 64 Sites</title>
         <style>
-            html, body {width: 100vw; height: 100vh; padding: 0; margin 0; border: 0;}
+            html {min-width: 100vw; min-height: 100vh; padding: 0; margin 0; border: 0;}
+            body {min-width: 100vw; min-height: 100vh; margin: 0; padding: 0; border: 0;}
             #content   {width: 100vw; min-height: 100vh; padding: 0; margin: 0; border: 0;}
         </style>
     </head>
-    <body id="{{.Content}}">
+    <body>
         <iframe src="{{.Content}}" id="content" name="content"></iframe>
     </body>
     {{ else }}
