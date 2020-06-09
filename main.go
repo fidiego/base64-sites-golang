@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 	"time"
 )
 
@@ -84,7 +83,7 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 
 	// encode
 	encoded := base64.StdEncoding.EncodeToString([]byte(p.Content))
-	base64_string := strings.Join([]string{"data:text/html;base64,", encoded}, "")
+	base64_string := fmt.Sprintf("data:text/html;base64,%s", encoded)
 	// calculate lengths
 	content_length := len(p.Content)
 	base64_string_length := len(base64_string)
@@ -140,7 +139,7 @@ func main() {
 	fmt.Printf("     - PORT=%s\n", port)
 
 	server := &http.Server{
-		Addr:           strings.Join([]string{":", port}, ""), // TODO: better concat?
+		Addr:           fmt.Sprintf(":%s", port),
 		Handler:        nil,
 		ReadTimeout:    5 * time.Second,
 		WriteTimeout:   5 * time.Second,
