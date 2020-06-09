@@ -68,6 +68,19 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	minifier := minify.New()
 	minifier.AddFunc("text/html", html.Minify)
 	minified, err := minifier.String("text/html", p.Content)
+	// Handle minification error
+	if err != nil {
+		log.Println("Error during HTML Minification")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Header().Set("Content-Type", "application/json")
+		errorResponse := ApiErrorResponse{
+			Success: false,
+			Message: "An unexpected error occurred while minifying the content. Make sure you're passing valid HTML.",
+		}
+		// write error response to buffer
+		json.NewEncoder(w).Encode(errorResponse)
+		return
+	}
 
 	// encode
 	encoded := base64.StdEncoding.EncodeToString([]byte(p.Content))
