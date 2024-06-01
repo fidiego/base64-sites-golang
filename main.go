@@ -4,17 +4,19 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/tdewolff/minify"
-	"github.com/tdewolff/minify/html"
 	"html/template"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
+
+	"github.com/tdewolff/minify"
+	"github.com/tdewolff/minify/html"
 )
 
 type ApiRequest struct {
-	Content string `json:content`
+	Content string `json:"content"`
 }
 
 type ApiErrorResponse struct {
@@ -134,23 +136,42 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	fmt.Println("Starting Base64 Site Service")
 
-	var port = os.Getenv("PORT") // TODO: validate, perhaps
+	// parse port from env var - use 8080 as a fallback if not set
+	var portStr = os.Getenv("PORT")
+	var port int32
+	if portStr == "" {
+		log.Println("PORT env not provided. Falling back to default 8080.")
+		port = 8080
+	} else {
+		parsed, err := strconv.Atoi(portStr)
+		if err != nil {
+			log.Fatal("Error parsing PORT env var")
+			os.Exit(1)
+		} else {
+			port = int32(parsed)
+		}
+
+	}
+
 	fmt.Println(" -> loaded env vars")
-	fmt.Printf("     - PORT=%s\n", port)
+	fmt.Printf("     - PORT=%d\n", port)
 
 	server := &http.Server{
-		Addr:           fmt.Sprintf(":%s", port),
+		Addr:           fmt.Sprintf(":%d", port),
 		Handler:        nil,
 		ReadTimeout:    5 * time.Second,
 		WriteTimeout:   5 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 
+	// register routes
 	fmt.Println(" -> prepared http.Server")
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/api", apiHandler)
 	http.HandleFunc("/render", renderHandler)
+
 	fmt.Println(" -> registered routes")
-	fmt.Printf(" -> starting on port:%s\n", port)
+	fmt.Printf(" -> starting on port:%d\n", port)
+
 	log.Fatal(server.ListenAndServe())
 }
