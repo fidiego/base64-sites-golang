@@ -1,63 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta name="generator" content="HTML Tidy for HTML5 for Apple macOS version 5.6.0">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
-  <title>Base64 Site - Render Base 64 Sites</title>
-</head>
-<body>
-  <header>
-    <h1>Base64 Site</h1>
-    <p>Turn HTML into a link that <i>is</i> the site.</p>
-    <nav>
-      <a href="#what">What</a> / <a href="#why">Why</a> / <a href="#how">How</a> / <a href="//github.com/fidiego/base64-sites">Source</a>
-    </nav>
-  </header>
-  <section id="what">
-    <h2 id="what">What does it do?</h2>
-    <ol>
-      <li>Takes HTML and converts it to base64.</li>
-      <li>Offers a <a href="/render"><code>/render</code></a> endpoint to render the base64 encoded HTML in an iframe.
-      </li>
-    </ol>
-  </section>
-  <section id="try-it">
-    <h2>Try It</h2>
-    <form id="content-form" action="/render" name="content-form">
-      <label>Enter some HTML content here</label>
-      <textarea name="content" id="content-textarea" rows="15" style="width: 100%;" autofocus=""></textarea> <button type="submit" id="submit">Submit</button>
-    </form>
-  </section>
-  <hr>
-  <section id="why">
-    <h2 id="why">Why</h2>
-    <p>To make tiny websites where the URL effectively <i>is</i> the website. The strings produced can be pasted into a URL bar directly. This is great if you're sharing content that doesn't merit hosting, for example an ephemeral HTML report.</p>
-    <p>A problem arises when someone is on their phone since most messaging apps won't recognize the string as a URL. We address that by providing a <a href="/render"><code>/render</code></a> endpoint that takes a <code>context</code> attribute. This endpoint returns an iframe with the base64 string as the value for the <code>src</code> attribute. The link can be shared and, given it's a valid url, can be opened on mobile devices.</p>
-  </section>
-  <section>
-    <h2 id="how">How it works</h2>
-    <p>Browsers can render base64 encoded content. Base64 encoding is often used for images or svgs in css since the image can be encoded in the css file reducing the need for additional requests [<a href="https://css-tricks.com/data-uris/">1</a>].</p>
-    <p>HTML can be similarly encoded. Check the source for the <code>/api</code> endpoint for the code. It simply:</p>
-    <ol>
-      <li>Minifies the HTML string</li>
-      <li>Base64 encodes the minified HTML string and add the <code>data:text/html;base64,</code> prefix.</li>
-      <li>URI Encode the base64 string.</li>
-    </ol>One can then simply pass the URI encoded base64 encoded HTML string to the <code>/render</code> endpoint as the <code>content</code> param and that endpoint will return an iframe with <code>content</code> as the <code>src</code>.
-  </section>
-  <section>
-    <h3>But <i>why</i> though?</h3>
-    <p>I often want to send very small pieces of information to a co-worker, some of which is best displayed in tables. I have some python scripts that pull data and generate these neat tables which I prefer to print to the terminal (shout out to <a href="https://github.com/astanin/python-tabulate">tabulate</a>). But, if I need to share this information, HTML is a much better format. The tabulate library has an HTML output option, but I don't want to set up hosting for such ephemeral information. It's easy to pipe the HTML to a script that bas64 encodes it and adds the <code>'data:text/html;base64,'</code> prefix. The resulting string can then be opened in the browser.</p>
-    <p><b>However!</b> This is not the case on mobile. The string isn't recognized as a URL and the workarounds are just too many steps (open in Firefox Focus or copy and paste into a mobile Browser). But if I pass the base64 string as a query parameter to an endpoint that simply returns it as the src in an iframe (as suggested in <a href="https://stackoverflow.com/a/670509">this SO Answer</a>), we're in business. I can now send these one-offs (that dont' require persistence) to folks on mobile devices and they can open them like any other link.</p>
-  </section>
-  <hr>
-  <footer>
-    Made by @fidiego. Find me on <a href="//github.com/fidiego">GitHub</a> or <a href="//twitter.com/fidiego">Twitter</a>.
-  </footer>
-  <script id="logic">
-  {{template "index.js" .}}
-  </script>
-</body>
+  <head>
+    <meta
+      name="generator"
+      content="HTML Tidy for HTML5 for Apple macOS version 5.6.0"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"
+    />
+    <title>Base64 Site - Render Base 64 Sites</title>
+  </head>
+  <body>
+    <header>
+      <h1>Base64 Site</h1>
+      <p>Turn HTML into a link that <i>is</i> the site.</p>
+      <nav>
+        <a href="#what">What</a> / <a href="#why">Why</a> /
+        <a href="#how">How</a> /
+        <a href="//github.com/fidiego/base64-sites">Source</a>
+      </nav>
+    </header>
+    <section id="what">
+      <h2 id="what">What does it do?</h2>
+      <ol>
+        <li>Takes HTML and converts it to base64.</li>
+        <li>
+          Offers a <a href="/render"><code>/render</code></a> endpoint to render
+          the base64 encoded HTML in an iframe.
+        </li>
+      </ol>
+    </section>
+    <section id="try-it">
+      <h2>Try It</h2>
+      <form id="content-form" action="/render" name="content-form">
+        <label>Enter some HTML content here</label>
+        <textarea
+          name="content"
+          id="content-textarea"
+          rows="15"
+          style="width: 100%"
+          autofocus=""
+        ></textarea>
+        <button type="submit" id="submit">Submit</button>
+      </form>
+    </section>
+    <hr />
+    <section id="why">
+      <h2 id="why">Why</h2>
+      <p>
+        To make tiny websites where the URL effectively <i>is</i> the website.
+        The strings produced can be pasted into a URL bar directly. This is
+        great if you're sharing content that doesn't merit hosting, for example
+        an ephemeral HTML report.
+      </p>
+      <p>
+        A problem arises when someone is on their phone since most messaging
+        apps won't recognize the string as a URL. We address that by providing a
+        <a href="/render"><code>/render</code></a> endpoint that takes a
+        <code>context</code> attribute. This endpoint returns an iframe with the
+        base64 string as the value for the <code>src</code> attribute. The link
+        can be shared and, given it's a valid url, can be opened on mobile
+        devices.
+      </p>
+    </section>
+    <section>
+      <h2 id="how">How it works</h2>
+      <p>
+        Browsers can render base64 encoded content. Base64 encoding is often
+        used for images or svgs in css since the image can be encoded in the css
+        file reducing the need for additional requests [<a
+          href="https://css-tricks.com/data-uris/"
+          >1</a
+        >].
+      </p>
+      <p>
+        HTML can be similarly encoded. Check the source for the
+        <code>/api</code> endpoint for the code. It simply:
+      </p>
+      <ol>
+        <li>Minifies the HTML string</li>
+        <li>
+          Base64 encodes the minified HTML string and add the
+          <code>data:text/html;base64,</code> prefix.
+        </li>
+        <li>URI Encode the base64 string.</li>
+      </ol>
+      One can then simply pass the URI encoded base64 encoded HTML string to the
+      <code>/render</code> endpoint as the <code>content</code> param and that
+      endpoint will return an iframe with <code>content</code> as the
+      <code>src</code>.
+    </section>
+    <section>
+      <h3>But <i>why</i> though?</h3>
+      <p>
+        I often want to send very small pieces of information to a co-worker,
+        some of which is best displayed in tables. I have some python scripts
+        that pull data and generate these neat tables which I prefer to print to
+        the terminal (shout out to
+        <a href="https://github.com/astanin/python-tabulate">tabulate</a>). But,
+        if I need to share this information, HTML is a much better format. The
+        tabulate library has an HTML output option, but I don't want to set up
+        hosting for such ephemeral information. It's easy to pipe the HTML to a
+        script that bas64 encodes it and adds the
+        <code>'data:text/html;base64,'</code> prefix. The resulting string can
+        then be opened in the browser.
+      </p>
+      <p>
+        <b>However!</b> This is not the case on mobile. The string isn't
+        recognized as a URL and the workarounds are just too many steps (open in
+        Firefox Focus or copy and paste into a mobile Browser). But if I pass
+        the base64 string as a query parameter to an endpoint that simply
+        returns it as the src in an iframe (as suggested in
+        <a href="https://stackoverflow.com/a/670509">this SO Answer</a>), we're
+        in business. I can now send these one-offs (that dont' require
+        persistence) to folks on mobile devices and they can open them like any
+        other link.
+      </p>
+    </section>
+    <hr />
+    <footer>
+      Made by @fidiego. Find me on <a href="//github.com/fidiego">GitHub</a> or
+      <a href="//twitter.com/fidiego">Twitter</a>.
+    </footer>
+    <script id="logic">
+      {{template "index.js" .}}
+    </script>
+  </body>
 </html>

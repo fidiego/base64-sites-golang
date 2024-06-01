@@ -1,33 +1,40 @@
 <!DOCTYPE html>
 <html>
-    {{ if .Content }}
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Base64 Site - Render Base 64 Sites</title>
-        <style>
-            html {min-width: 100vw; min-height: 100vh; padding: 0; margin 0; border: 0;}
-            body {min-width: 100vw; min-height: 100vh; margin: 0; padding: 0; border: 0;}
-            #content   {width: 100vw; min-height: 100vh; padding: 0; margin: 0; border: 0;}
-        </style>
-    </head>
-    <body>
-        <iframe src="{{.Content}}" id="content" name="content"></iframe>
-    </body>
-    {{ else }}
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
-        <title>Base64 Site - Render Base 64 Sites</title>
-    </head>
-    <body>
-        <h1>No Content Provided</h1>
-        <p>Redirecting you to the <a href="/">homepage</a>.</p>
-        <script>
-            (function(){setTimeout(function(){window.location = '/'}, 3000)})()
-        </script>
-    </body>
-    {{ end }}
+  {{ if .Content }}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Base64 Site - Render Base 64 Sites</title>
+    <style>
+      html {min-width: 100vw; min-height: 100vh; padding: 0; margin 0; border: 0;}
+      body {min-width: 100vw; min-height: 100vh; margin: 0; padding: 0; border: 0;}
+      #content   {width: 100vw; min-height: 100vh; padding: 0; margin: 0; border: 0;}
+    </style>
+  </head>
+  <body>
+    <iframe src="{{.Content}}" id="content" name="content"></iframe>
+  </body>
+  {{ else }}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"
+    />
+    <title>Base64 Site - Render Base 64 Sites</title>
+  </head>
+  <body>
+    <h1>No Content Provided</h1>
+    <p>Redirecting you to the <a href="/">homepage</a>.</p>
+    <script>
+      (function () {
+        setTimeout(function () {
+          window.location = '/';
+        }, 3000);
+      })();
+    </script>
+  </body>
+  {{ end }}
 </html>

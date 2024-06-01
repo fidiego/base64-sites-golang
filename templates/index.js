@@ -1,4 +1,4 @@
-const generateResults = function(response) {
+const generateResults = function (response) {
   // remove results, if exists
   var results = document.getElementById('results');
   if (results) {
@@ -27,29 +27,29 @@ const generateResults = function(response) {
   section.appendChild(links);
 };
 
-const onSubmit = function() {
+const onSubmit = function () {
   var ta = document.getElementById('content-textarea');
   var html = ta.value;
-  var payload = {content: html};
+  var payload = { content: html };
   fetch('/api', {
     method: 'POST',
-    headers: {'content-type': 'application/json'},
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify(payload),
   })
-    .then(function(response) {
-      response.json().then(function(resp) {
+    .then(function (response) {
+      response.json().then(function (resp) {
         generateResults(resp);
       });
     })
-    .catch(function(err) {
+    .catch(function (err) {
       console.error(err);
     });
 };
 
-(function() {
+(function () {
   console.info('Document Ready: registering Event Listener');
   var form = document.getElementById('content-form');
-  form.addEventListener('submit', function(e) {
+  form.addEventListener('submit', function (e) {
     e.preventDefault();
     onSubmit();
   });
